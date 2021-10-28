@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "npx tsc --watch",
     "build": "rm -rf ./dist && npx tsc",
-    "build-t": "npm run build && npm run test",
     "test": "mocha --exit",
     "start": "node dist/app.js"
   },
