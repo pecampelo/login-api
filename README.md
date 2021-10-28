@@ -49,18 +49,14 @@ when scaling the project's size.
 * [X] Server is online
 * [X] Tests for Router
 * [X] Router
-* [ ] Tests for Body Parser
-* [ ] Body Parser
+* [X] Tests for Body Parser
+* [X] Body Parser
+* [X] Create route handler
 * [ ] Tests for CRUD controller for Users
-* [ ] Controller
+* [ ] Create controller (which handle business rules)
 * [ ] Tests for CRUD models for Users
+* [ ] Create model (which handle data from and into the database)
 * [ ] Tests for migrations for Users with Prisma
-* [ ] Other Tests for endpoint /signup
-* [ ] Other Tests for endpoint /signin
+* [ ] Create migrations
 * [ ] Dockerize application
 * [ ] Dockerize database
-* [ ] Create route handler
-* [ ] Body parser
-* [ ] Create controller (which handle business rules)
-* [ ] Create model (which handle data from and into the database)
-* [ ] Create migrations
