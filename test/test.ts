@@ -4,10 +4,8 @@
 /* eslint-disable no-undef */
 const assert = require('assert').strict;
 import http from 'http';
-import { config } from '../src/config';
+import { config, dbConfig } from '../src/app';
 import server from '../src/server';
-import { bodyParser } from '../src/helpers/parsers'
-import { resolve } from 'path/posix';
 
 server.listen(config);
 
@@ -87,7 +85,7 @@ describe('API Router', () => {
 			res.on('end', () => {
 
 				const actual: string[] | {}[] = [res.statusCode, JSON.parse(data)];
-				const expected: string[] | {}[] = [200, { message: 'server is online'}]
+				const expected: string[] | {}[] = [200, { message: 'signed in!'}]
 
 				assert.deepStrictEqual(actual, expected);
 
@@ -173,9 +171,7 @@ describe('API Router', () => {
 });
 
 
-
-
-describe('User Controller', () => {
+describe('Sign Up Controller', () => {
 
   it('should receive a username', () => {
     assert.deepStrictEqual(true, true);
@@ -201,11 +197,35 @@ describe('User Controller', () => {
     assert.deepStrictEqual(true, true);
   });
 
+	it('should return confirmation if a user was created successfully', () => {
+    assert.deepStrictEqual(true, true);
+  });
+
 });
 
-describe('/signup', () => {
+describe('Sign In Controller', () => {
 
-  it('should receive user data in the controller', () => {
+  it('should receive an e-mail', () => {
+    assert.deepStrictEqual(true, true);
+  });
+
+  it('should receive a password', () => {
+    assert.deepStrictEqual(true, true);
+  });
+
+  it('should allow return a Bearer Token if user exists in database', () => {
+    assert.deepStrictEqual(true, true);
+  });
+
+  it('should respond "Invalid e-mail or password" if data is not valid', () => {
+    assert.deepStrictEqual(true, true);
+  });
+
+});
+
+describe('Database', () => {
+
+	it(`should be able to connect to the database on port ${dbConfig.port} `, () => {
     assert.deepStrictEqual(true, true);
   });
 
@@ -213,40 +233,13 @@ describe('/signup', () => {
     assert.deepStrictEqual(true, true);
   });
 
-  it('should store user in database', () => {
+  it('should store user in database when information is valid', () => {
     assert.deepStrictEqual(true, true);
   });
 
-  it('should show a confirmation that the user was created when user data is provided correctly', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-  it('should ask for more information when the user does not provide enough information', () => {
-    assert.deepStrictEqual(true, true);
-  });
+	it('should retrieve information from database', () => {
+		assert.deepStrictEqual(true, true);
+	})
 
 });
 
-describe('/signin', () => {
-
-  it('should receive e-mail and password', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-  it('should return a Bearer Token if the user is in the database', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-  it('should return a 4xx if the user is not in the database', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-  it('should return a 4xx if the password is wrong', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-  it('should a confirmation that the user was created when user data is provided correctly', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-});

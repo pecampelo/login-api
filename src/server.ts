@@ -1,5 +1,9 @@
 import http from 'http';
 import { bodyParser } from './helpers/parsers';
+import Router from './router/router';
+import routes from './router/routes';
+
+const router = new Router();
 
 const server = http.createServer( async (req: any, res: any) => {
 
@@ -12,28 +16,25 @@ const server = http.createServer( async (req: any, res: any) => {
 
   // TODO: Receive body
 
-	await bodyParser(req);
-  //
+	router.use(routes)
+	const route = await router.find(req.url, req.method);
 
+	if (route) {
 
+		if (req.method === 'POST') {
+			try {
+				await bodyParser(req, () => route.handler(req, res))
+			}
+			catch (err: any) {
+				console.log(err.message)
+			}
 
-	if (req.method === 'GET' && req.url === '/') {
-		return res.send(200, {
-			endpoints: [
-				'/signin',
-				'/signup'
-			]
-		})
+		} else {
+			route.handler(req, res)
+
+		}
+
 	}
-
-  if (req.method === 'GET' && req.url === '/signin') {
-    return res.send(200, { message: 'server is online' });
-  }
-
-	if (req.method === 'POST' && req.url === '/signup') {
-		// console.log(req.body)
-    return res.send(200, { message: 'posted'});
-  }
 
 	else {
 		res.writeHead(404, { 'Content-Type': 'text/html' });

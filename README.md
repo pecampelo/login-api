@@ -52,10 +52,11 @@ when scaling the project's size.
 * [X] Tests for Body Parser
 * [X] Body Parser
 * [X] Create route handler
-* [ ] Tests for CRUD controller for Users
-* [ ] Create controller (which handle business rules)
-* [ ] Tests for CRUD models for Users
-* [ ] Create model (which handle data from and into the database)
+* [ ] Tests for Sign-In Controller
+* [ ] Create Sign-In Controller (which handle business rules)
+* [ ] Tests for Sign-Up Controller
+* [ ] Create Sign-Up Controller (which handle business rules)
+* [ ] Tests for Database
 * [ ] Tests for migrations for Users with Prisma
 * [ ] Create migrations
 * [ ] Dockerize application

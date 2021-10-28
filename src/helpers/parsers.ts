@@ -1,4 +1,4 @@
-export const bodyParser = async (req: any) => {
+export const bodyParser = async (req: any, callback: () => any) => {
 
 	const buffers = []
 
@@ -8,10 +8,15 @@ export const bodyParser = async (req: any) => {
 
 	const data = Buffer.concat(buffers).toString();
 
-	const body: any = await JSON.parse(data);
+	if (!data) {
+		req.body = {};
 
-	req.body = body;
+	} else {
 
-	return req;
+		const body: any = await JSON.parse(data);
+		req.body = body;
 
+	}
+
+	callback();
 }
