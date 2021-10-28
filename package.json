@@ -4,10 +4,10 @@
   "description": "a simple API that stores user email and password in a database",
   "main": "app.js",
   "scripts": {
-    "dev": "npx tsc --watch",
+    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/app.ts",
     "build": "rm -rf ./dist && npx tsc",
-    "test": "mocha --exit",
-    "start": "node dist/app.js"
+    "test": "npm run build && mocha dist/test/test --exit",
+    "start": "node dist/src/app.js"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,7 @@
     "mocha": "^9.1.3",
     "nodemon": "^2.0.14",
     "prisma": "^3.3.0",
-    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.4"
   },
   "dependencies": {

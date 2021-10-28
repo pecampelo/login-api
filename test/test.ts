@@ -3,21 +3,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const assert = require('assert').strict;
-const { sign } = require('crypto');
-const http = require('http');
-const { config } = require('../dist/config');
-const { default: server } = require('../dist/src/server');
+import http from 'http';
+import { config } from '../src/config';
+import server from '../src/server';
+import { bodyParser } from '../src/helpers/parsers'
+import { resolve } from 'path/posix';
 
 server.listen(config);
-
-
 
 describe('API Router', () => {
 
 	it(`should listen to server on expected route`, () => {
 
-		const actualRoute = `http://${config.host}:${config.port}`;
-		const expectedRoute = `http://${config.host}:${config.port}`;
+		const actualRoute: string = `http://${config.host}:${config.port}`;
+		const expectedRoute: string = `http://${config.host}:${config.port}`;
 
 		assert.deepStrictEqual(actualRoute, expectedRoute);
 
@@ -52,7 +51,7 @@ describe('API Router', () => {
 		signUpRequest.write(newUserData);
 		signUpRequest.end();
 
-		const actual = [signUpRequest.method];
+		const actual: String[] = [signUpRequest.method];
 		const expected = ['POST'];
 
 		assert.deepStrictEqual(actual, expected);
@@ -87,15 +86,13 @@ describe('API Router', () => {
 			res.on('data', d => data += d);
 			res.on('end', () => {
 
-				assert.deepStrictEqual(
-					[res.statusCode, JSON.parse(data)],
-				 	[200, { message: 'server is online'}]);
+				const actual: string[] | {}[] = [res.statusCode, JSON.parse(data)];
+				const expected: string[] | {}[] = [200, { message: 'server is online'}]
+
+				assert.deepStrictEqual(actual, expected);
 
 			})
-
-
 		});
-
   });
 
   it('should give a 404 to any requests with other methods', () => {
@@ -125,25 +122,58 @@ describe('API Router', () => {
 		notAllowedRequest.on('response', async res => {
 			let data = '';
 			res.on('data', d => data += d);
-			res.on('end', () => assert.deepStrictEqual([res.statusCode, data.slice(0, 6)], 	[404, 'Cannot']))
+			res.on('end', () => {
+
+				const actual = [res.statusCode, data.slice(0, 6)]
+				const expected = [404, 'Cannot']
+
+				assert.deepStrictEqual(actual, expected)
+
+			})
+		});
+	})
+
+	it('should receive an empty body and not undefined when there is no body', async () => {
+
+		let body = ''
+
+		const bodyParserOptions = {
+			hostname: config.host,
+			port: config.port,
+			path: '/signin',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		}
+
+		let data = '';
+
+		const requested = http.request(bodyParserOptions, (res) => {
+
+			res.on('data', (chunk: any) => {
+				data += chunk;
+			});
+
+			res.on('end', async () => body = await JSON.parse(data))
 
 		});
 
-	})
+		if (body === '') { body = JSON.stringify({}) }
+		else {}
+
+		requested.write(body);
+		requested.end();
+
+		assert.deepStrictEqual(JSON.parse(body), {});
+
+
+	});
 
 });
 
-describe('Body Parser', () => {
 
-  it('should receive an empty body and not undefined when there is no body', () => {
-    assert.deepStrictEqual(true, true);
-  });
 
-  it('should receive a body as an object', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-});
 
 describe('User Controller', () => {
 

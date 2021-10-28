@@ -1,16 +1,21 @@
 import http from 'http';
+import { bodyParser } from './helpers/parsers';
 
-const server = http.createServer((req: any, res: any): void => {
-  // TODO: Parse URL
+const server = http.createServer( async (req: any, res: any) => {
 
-  // TODO: Receive body
-
-  //
-
-  res.send = (statusCode: number, body: any) => {
+	res.send = (statusCode: number, body: any) => {
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(body));
   }
+
+	// TODO: Parse URL
+
+  // TODO: Receive body
+
+	await bodyParser(req);
+  //
+
+
 
 	if (req.method === 'GET' && req.url === '/') {
 		return res.send(200, {
@@ -26,7 +31,8 @@ const server = http.createServer((req: any, res: any): void => {
   }
 
 	if (req.method === 'POST' && req.url === '/signup') {
-    return res.send(200, { message: 'server is online' });
+		// console.log(req.body)
+    return res.send(200, { message: 'posted'});
   }
 
 	else {
@@ -34,7 +40,6 @@ const server = http.createServer((req: any, res: any): void => {
 		res.end(`Cannot ${req.method} ${req.url}`);
 		return;
   }
-
 
 });
 
