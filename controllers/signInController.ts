@@ -1,8 +1,12 @@
-export default (req: any, res: any) => {
-	interface resType {
-		email: string,
-		password: string,
-	}
+import { PrismaClient } from "@prisma/client";
+interface resType {
+	email: string,
+	password: string,
+}
+
+const prisma = new PrismaClient();
+
+export default async (req: any, res: any) => {
 
 	const { body } = req;
 
@@ -20,8 +24,22 @@ export default (req: any, res: any) => {
 
 			if (result) {
 
-				res.setHeader('Authorization', 'Bearer-Token');
-				return res.send(200, { message: 'You have logged-in successfully!'})
+				await prisma.user.findFirst({
+					where: {
+						email: email,
+						password: password,
+					}
+				})
+				.then(res.setHeader('Authorization', 'Bearer-Token'))
+
+				.then((user: any) => {
+					return res.send(200, { message: `${user?.username} has logged in successfully!`})
+				})
+
+				.catch((e: any) => {
+					console.log(e)
+					return res.send(400, { message: 'Access denied! Check credentials.'})
+				})
 
 			} else {
 

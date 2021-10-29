@@ -55,7 +55,7 @@ describe('API Router', () => {
 		assert.deepStrictEqual(actual, expected);
   });
 
-  it('should return HTTP 200 when making a GET request to /signin', () => {
+  it('should return HTTP 200 when making a valid GET request to /signin', () => {
 
 		const createdUserData = JSON.stringify({
 			email: 'pedrohcmatheus@gmail.com',
@@ -85,7 +85,7 @@ describe('API Router', () => {
 			res.on('end', () => {
 
 				const actual: string[] | {}[] = [res.statusCode, JSON.parse(data)];
-				const expected: string[] | {}[] = [200, { message: 'You have logged-in successfully!'}]
+				const expected: string[] | {}[] = [200, { message: 'pecampelo has logged in successfully!'}]
 
 				assert.deepStrictEqual(actual, expected);
 
@@ -259,7 +259,7 @@ describe('Sign Up', () => {
 
 describe('Sign In', () => {
 
-	it('should allow return a Bearer Token if user exists in database', () => {
+	it('should return a Bearer Token if user exists in database', () => {
 
 		const userData = JSON.stringify({
 			password: 'dodo',
@@ -288,7 +288,7 @@ describe('Sign In', () => {
 			res.on('end', () => {
 
 				assert.deepStrictEqual(res.headers.authorization, 'Bearer-Token');
-				assert.deepStrictEqual(JSON.parse(str), { message: 'You have logged-in successfully!'});
+				assert.deepStrictEqual(JSON.parse(str), { message: 'pecampelo has logged in successfully!'});
 
 			});
 
@@ -304,7 +304,7 @@ describe('Sign In', () => {
 
 describe('Database', () => {
 
-	it(`should be able to connect to the database on port ${dbConfig.port} `, () => {
+	it(`should connect to the database on port ${dbConfig.port} `, () => {
 
 
     assert.deepStrictEqual(true, true);

@@ -22,6 +22,7 @@ const server = http.createServer( async (req: any, res: any) => {
 	if (route) {
 
 		if (req.method === 'POST' || req.method === 'GET') {
+
 			try {
 				await bodyParser(req, () => route.handler(req, res))
 			}

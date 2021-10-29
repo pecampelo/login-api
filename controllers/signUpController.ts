@@ -1,13 +1,16 @@
-export default (req: any, res: any) => {
+import { PrismaClient } from "@prisma/client";
+interface bodyType {
+	email: string,
+	password: string,
+	username: string,
+	fullName: string,
+	age: number,
+	address: string,
+}
 
-	interface bodyType {
-		email: string,
-		password: string,
-		username: string,
-		fullName: string,
-		age: number,
-		address: string,
-	}
+const prisma = new PrismaClient();
+
+export default async (req: any, res: any) => {
 
 	const { body } = req;
 
@@ -32,7 +35,22 @@ export default (req: any, res: any) => {
 
 			if (result) {
 
-				return res.send(200, { message: 'User was created!'})
+				await prisma.user.create({
+					data: {
+						email: email,
+						password: password,
+						username: username,
+						fullname: fullName,
+						age: age,
+						address: address,
+					}
+				}).then((user: any) => {
+					return res.send(200, { message: `User ${user.username} was created!`})
+				}).catch((e: any) => {
+					console.log(e.message)
+
+					return res.send(400, { message: 'Database is unavailable!'})
+				})
 
 			} else {
 
@@ -42,12 +60,12 @@ export default (req: any, res: any) => {
 
 		}
 
-		catch (e) {
-			console.log(e)
-			return res.send(400, { message: 'body is either empty or invalid!'})
+		catch (e: any) {
+
+			console.log(e.message)
+
+			return res.send(400, { message: 'Request body is invalid!'})
 		}
-
-
 
 	}
 
