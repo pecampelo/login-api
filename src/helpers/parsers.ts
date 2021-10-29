@@ -10,12 +10,8 @@ export const bodyParser = async (req: any, callback: () => any) => {
 
 	if (!data) {
 		req.body = {};
-
 	} else {
-
-		const body: any = await JSON.parse(data);
-		req.body = body;
-
+		req.body = await JSON.parse(data);
 	}
 
 	callback();

@@ -69,7 +69,7 @@ describe('API Router', () => {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
-				'Content-Length': createdUserData.length
+				'Content-Length': createdUserData.length,
 			}
 		}
 
@@ -85,7 +85,7 @@ describe('API Router', () => {
 			res.on('end', () => {
 
 				const actual: string[] | {}[] = [res.statusCode, JSON.parse(data)];
-				const expected: string[] | {}[] = [200, { message: 'signed in!'}]
+				const expected: string[] | {}[] = [200, { message: 'You have logged-in successfully!'}]
 
 				assert.deepStrictEqual(actual, expected);
 
@@ -171,55 +171,134 @@ describe('API Router', () => {
 });
 
 
-describe('Sign Up Controller', () => {
+describe('Sign Up', () => {
 
-  it('should receive a username', () => {
-    assert.deepStrictEqual(true, true);
-  });
+	  it('should return invalid response when information is undefined', () => {
 
-  it('should receive an e-mail', () => {
-    assert.deepStrictEqual(true, true);
-  });
+			const userData = JSON.stringify({})
 
-  it('should receive a password', () => {
-    assert.deepStrictEqual(true, true);
-  });
+			const signUp = {
+				hostname: config.host,
+				port: config.port,
+				path: '/signup',
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Content-Length': userData.length
+				}
+			}
 
-  it('should receive a full name', () => {
-    assert.deepStrictEqual(true, true);
-  });
+			const signUpRequest = http.request(signUp, (res) => {
 
-  it('should receive an age', () => {
-    assert.deepStrictEqual(true, true);
-  });
+				let str = '';
 
-  it('should receive an address', () => {
-    assert.deepStrictEqual(true, true);
-  });
+				res.on('data', chunk => {
+					str += chunk;
+				});
 
-	it('should return confirmation if a user was created successfully', () => {
-    assert.deepStrictEqual(true, true);
-  });
+				res.on('end', () => {
+
+					assert.deepStrictEqual(JSON.parse(str), { error: 'Request body is invalid!'});
+				});
+
+			});
+
+			signUpRequest.write(userData);
+			signUpRequest.end();
+
+		});
+
+		it('should return confirmation if a user was created successfully', () => {
+
+			const userData = JSON.stringify({
+				username: 'pecampelo',
+				password: 'dodo',
+				email: 'pedrohcmatheus@gmail.com',
+				fullName: 'Pedro Henrique Campelo Matheus',
+				age: 26,
+				address: 'Rua Murilo do Amaral Ferreira, 388',
+			})
+
+			const signUp = {
+				hostname: config.host,
+				port: config.port,
+				path: '/signup',
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Content-Length': userData.length
+				}
+			}
+
+			const signUpRequest = http.request(signUp, (res) => {
+
+				let str = '';
+
+				res.on('data', chunk => {
+					str += chunk;
+				});
+
+				res.on('end', () => {
+
+					assert.deepStrictEqual(JSON.parse(str), { message: 'User was created!'});
+				});
+
+			});
+
+			signUpRequest.write(userData);
+			signUpRequest.end();
+
+
+
+
+			assert.deepStrictEqual(true, true);
+		});
 
 });
 
-describe('Sign In Controller', () => {
 
-  it('should receive an e-mail', () => {
-    assert.deepStrictEqual(true, true);
+describe('Sign In', () => {
+
+	it('should allow return a Bearer Token if user exists in database', () => {
+
+		const userData = JSON.stringify({
+			password: 'dodo',
+			email: 'pedrohcmatheus@gmail.com',
+		})
+
+		const signIn = {
+			hostname: config.host,
+			port: config.port,
+			path: '/signin',
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Content-Length': userData.length
+			}
+		}
+
+		const signInRequest = http.request(signIn, (res) => {
+
+			let str = '';
+
+			res.on('data', chunk => {
+				str += chunk;
+			});
+
+			res.on('end', () => {
+
+				assert.deepStrictEqual(res.headers.authorization, 'Bearer-Token');
+				assert.deepStrictEqual(JSON.parse(str), { message: 'You have logged-in successfully!'});
+
+			});
+
+		});
+
+		signInRequest.write(userData);
+		signInRequest.end();
+
   });
 
-  it('should receive a password', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-  it('should allow return a Bearer Token if user exists in database', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-  it('should respond "Invalid e-mail or password" if data is not valid', () => {
-    assert.deepStrictEqual(true, true);
-  });
 
 });
 
@@ -229,15 +308,11 @@ describe('Database', () => {
     assert.deepStrictEqual(true, true);
   });
 
-  it('should output a model user to migrations', () => {
+  it('should br able to store user in database when information is valid', () => {
     assert.deepStrictEqual(true, true);
   });
 
-  it('should store user in database when information is valid', () => {
-    assert.deepStrictEqual(true, true);
-  });
-
-	it('should retrieve information from database', () => {
+	it('should be able to retrieve information from database', () => {
 		assert.deepStrictEqual(true, true);
 	})
 
