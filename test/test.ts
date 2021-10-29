@@ -305,6 +305,8 @@ describe('Sign In', () => {
 describe('Database', () => {
 
 	it(`should be able to connect to the database on port ${dbConfig.port} `, () => {
+
+
     assert.deepStrictEqual(true, true);
   });
 

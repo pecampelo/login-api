@@ -37,12 +37,9 @@ and a password. It will return a Bearer Token as a response.
 * **PostgreSQL** as a database that can increase in size and make use of foreign keys
 when scaling the project's size.
 * **Prisma.io** as a modern ORM that can facilitate database usage and querying.
-* **Docker** to avoid dependency changes and to run a local database.
+* **Docker** to avoid dependency changes and to run independent containers for scalability in the future.
 * **JWT** to provide a Bearer Token for Single Signn Login.
 
-## Optional Features (if time allows it)
-
-*
 ## Development Steps
 
 * [X] Create schemata for all tests
@@ -56,8 +53,8 @@ when scaling the project's size.
 * [X] Create Sign-Up Controller (which handle business rules)
 * [X] Tests for Sign-In Controller
 * [X] Create Sign-In Controller (which handle business rules)
+* [X] Dockerize application
+* [ ] Dockerize database
 * [ ] Tests for Database
 * [ ] Tests for migrations for Users with Prisma
 * [ ] Create database connection
-* [ ] Dockerize application
-* [ ] Dockerize database
