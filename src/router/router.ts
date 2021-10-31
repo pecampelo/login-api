@@ -1,11 +1,14 @@
 type Route = {
 	endpoint: string,
 	method: string,
+	// eslint-disable-next-line no-unused-vars
 	handler: (req: any, res: any) => () => {};
 }
 
 export default class Router {
+
 	routes: Route[];
+
 	controllers: any[];
 
 	constructor() {
@@ -22,7 +25,7 @@ export default class Router {
 
 			try {
 
-				const route = this.routes.find((route) => route.endpoint === endpoint);
+				const route = this.routes.find((routeInside) => routeInside.endpoint === endpoint);
 
 				if (route == undefined) {
 					return;
@@ -31,7 +34,6 @@ export default class Router {
 				if (route.method === method) {
 					return route;
 				}
-
 
 			} catch (err: any) {
 

@@ -1,10 +1,10 @@
-export const bodyParser = async (req: any, callback: () => any) => {
+const bodyParser = async (req: any, callback: () => any) => {
 
-	const buffers = []
+	const buffers = [];
 
-  for await (const chunk of req) {
+	for await (const chunk of req) {
 		buffers.push(chunk);
-  }
+	}
 
 	const data = Buffer.concat(buffers).toString();
 
@@ -15,4 +15,6 @@ export const bodyParser = async (req: any, callback: () => any) => {
 	}
 
 	callback();
-}
+};
+
+export default bodyParser;

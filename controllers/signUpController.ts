@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+
 interface bodyType {
 	email: string,
 	password: string,
@@ -15,7 +16,7 @@ export default async (req: any, res: any) => {
 	const { body } = req;
 
 	if (!body) {
-		return res.send(400, { error: 'Request body is empty!'})
+		return res.send(400, { error: 'Request body is empty!' });
 	}
 
 	if (body) {
@@ -31,42 +32,67 @@ export default async (req: any, res: any) => {
 
 		try {
 
-			const result = email && password && username && fullName && age && address;
+			const result = Boolean(email && password && username && fullName && age && address);
+
+			// console.log(result);
 
 			if (result) {
 
-				await prisma.user.create({
-					data: {
+				console.log('🔨3');
+
+				const user = await prisma.user.findFirst({
+					where: {
 						email: email,
 						password: password,
-						username: username,
-						fullname: fullName,
-						age: age,
-						address: address,
-					}
-				}).then((user: any) => {
-					return res.send(200, { message: `User ${user.username} was created!`})
-				}).catch((e: any) => {
-					console.log(e.message)
+					},
+				});
 
-					return res.send(400, { message: 'Database is unavailable!'})
-				})
+				if (!user) {
+					console.log('🔨4');
+					await prisma.user.create({
+						data: {
+							email: email,
+							password: password,
+							username: username,
+							fullname: fullName,
+							age: age,
+							address: address,
+						},
+					})
+
+						.then((userOuted: any) => {
+
+							res.send(200, { message: `User ${userOuted.username} was created!` });
+							console.log('🔨5');
+						})
+
+						.catch((e: any) => {
+
+							console.log(e.stack);
+
+						})
+
+						.finally(async () => await prisma.$disconnect());
+
+				} else {
+
+					return res.send(400, { error: 'User already exists!' });
+
+				}
 
 			} else {
 
-				return res.send(400, { error: 'Request body is invalid!'})
+				return res.send(400, { error: 'Request body is invalid!' });
 
 			}
 
-		}
+		} catch (e: any) {
 
-		catch (e: any) {
+			console.log(e.message);
+			return res.send(400, { message: 'Database is unavailable!' });
 
-			console.log(e.message)
-
-			return res.send(400, { message: 'Request body is invalid!'})
 		}
 
 	}
 
-}
+};

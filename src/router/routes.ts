@@ -1,6 +1,6 @@
-import mainController from "../../controllers/mainController";
-import signInController from "../../controllers/signInController";
-import signUpController from "../../controllers/signUpController";
+import mainController from '../../controllers/mainController';
+import signInController from '../../controllers/signInController';
+import signUpController from '../../controllers/signUpController';
 
 const routes = [
 	{
@@ -17,7 +17,7 @@ const routes = [
 		endpoint: '/signin',
 		method: 'GET',
 		handler: signInController,
-	}
-]
+	},
+];
 
 export default routes;
