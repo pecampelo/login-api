@@ -30,25 +30,22 @@ export default async (req: any, res: any) => {
 			address,
 		}: bodyType = body;
 
-		try {
+		const result = Boolean(email && password && username && fullName && age && address);
 
-			const result = Boolean(email && password && username && fullName && age && address);
+		// console.log(result);
 
-			// console.log(result);
+		if (result) {
 
-			if (result) {
+			console.log('🔨3');
 
-				console.log('🔨3');
-
+			try {
 				const user = await prisma.user.findFirst({
 					where: {
 						email: email,
-						password: password,
 					},
 				});
 
 				if (!user) {
-					console.log('🔨4');
 					await prisma.user.create({
 						data: {
 							email: email,
@@ -58,38 +55,27 @@ export default async (req: any, res: any) => {
 							age: age,
 							address: address,
 						},
-					})
+					});
 
-						.then((userOuted: any) => {
-
-							res.send(200, { message: `User ${userOuted.username} was created!` });
-							console.log('🔨5');
-						})
-
-						.catch((e: any) => {
-
-							console.log(e.stack);
-
-						})
-
-						.finally(async () => await prisma.$disconnect());
-
-				} else {
+				}	else {
 
 					return res.send(400, { error: 'User already exists!' });
 
 				}
+			} catch (e: any) {
 
-			} else {
+				console.log(e);
+				return res.send(400, { message: 'Database is unavailable!' });
 
-				return res.send(400, { error: 'Request body is invalid!' });
+			} finally {
+
+				await prisma.$disconnect();
 
 			}
 
-		} catch (e: any) {
+		} else {
 
-			console.log(e.message);
-			return res.send(400, { message: 'Database is unavailable!' });
+			return res.send(400, { error: 'Request body is invalid!' });
 
 		}
 

@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
+
 interface resType {
 	email: string,
 	password: string,
 }
-
-const prisma = new PrismaClient();
 
 export default async (req: any, res: any) => {
 	const { body } = req;
@@ -21,40 +21,25 @@ export default async (req: any, res: any) => {
 
 		if (result) {
 
-			const find = new Promise((resolve) => {
+			const user: any = await prisma.user.findFirst({
+				where: {
+					email: email,
+				},
 
-				try {
-					resolve(
-						prisma.user.findFirst({
-							where: {
-								email: email,
-							},
-						}),
+			}).then(() => {
 
-					);
-				} catch (err: any) {
-					console.log(err.message);
+				if (user !== undefined && user.password !== password) {
+					return res.send(400, { message: 'Access denied! Check credentials.' });
 				}
-
-				setTimeout(() => {
-
-				}, 5000);
+				res.setHeader('Authorization', 'Bearer-Token');
+				return res.send(200, { message: `${user?.username} has logged in successfully!` });
 
 			}).catch((e: any) => {
 
 				console.log(e);
 				return res.send(400, { error: 'Couldn\'t connect to database!' });
 
-			}).then((user: any) => {
-
-				if (user !== null && user.password !== password) {
-					return res.send(400, { message: 'Access denied! Check credentials.' });
-				}
-				res.setHeader('Authorization', 'Bearer-Token');
-				return res.send(200, { message: `${user?.username} has logged in successfully!` });
-			});
-
-			find.finally(async () => await prisma.$disconnect());
+			}).finally(async () => await prisma.$disconnect());
 
 		} else {
 			return res.send(400, { error: 'Please input an e-mail and a password.' });

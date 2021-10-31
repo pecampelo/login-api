@@ -2,12 +2,15 @@ FROM node:17-alpine
 
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json", "./"]
+COPY package*.json ./
 
 RUN npm install
 
 COPY . .
 
-RUN npm run build
+EXPOSE 8005
 
-CMD [ "npm", "start"]
+RUN npm run build
+RUN npx prisma generate
+
+CMD [ "node", "dist/src/app.js"]

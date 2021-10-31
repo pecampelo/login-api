@@ -1,23 +1,25 @@
 version: '3.8'
 services:
-  postgres:
+  db:
     image: postgres
     restart: always
     environment:
     - POSTGRES_USER=prisma
     - POSTGRES_PASSWORD=prisma
-    - POSTGRES_DB=users
+    -  POSTGRES_DB=users
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - /var/lib/postgresql/data
     ports:
     - 5432:5432
   server:
     build: .
     depends_on:
-      - postgres
+      - db
     ports:
-    - 8005:8005
-    volumes:
-    - ./:/app
+    - "8005:8005"
+    environment:
+    - DATABASE_URL=postgresql://prisma:prisma@db:5432/users
     command: npm start
+volumes:
+  postgres:
 

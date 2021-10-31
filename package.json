@@ -5,9 +5,9 @@
   "main": "app.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/app.ts",
+    "go": "docker-compose up",
     "build": "rm -rf ./dist && npx tsc",
-    "prisma-build": "npx prisma generate && npx prisma migrate dev",
-    "test": "npm run build && mocha dist/test/test --exit",
+    "test": "npm run build && mocha dist/test/test --exit ",
     "start": "node dist/src/app.js"
   },
   "repository": {
@@ -27,22 +27,23 @@
   },
   "homepage": "https://github.com/pecampelo/login-api#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.2.0",
-    "@typescript-eslint/parser": "^5.2.0",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.6",
     "@types/pg": "^8.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.25.2",
     "mocha": "^9.1.3",
     "nodemon": "^2.0.14",
-    "prisma": "^3.3.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.4"
   },
   "dependencies": {
     "@prisma/client": "^3.3.0",
-    "pg": "^8.7.1"
+    "dotenv-cli": "^4.1.0",
+    "pg": "^8.7.1",
+    "prisma": "^3.3.0"
   }
 }
